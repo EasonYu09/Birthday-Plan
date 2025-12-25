@@ -1,7 +1,8 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ResultData } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || process.env.API_KEY || '');
+const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
 export const generateBirthdayBlessing = async (result: ResultData): Promise<string> => {
     const prompt = `
@@ -12,14 +13,11 @@ export const generateBirthdayBlessing = async (result: ResultData): Promise<stri
     `;
 
     try {
-        const response = await ai.models.generateContent({
-            model: 'gemini-3-flash-preview',
-            contents: prompt,
-        });
-        
-        return response.text || "親愛的，生日快樂！這趟旅程是為妳量身打造的，希望妳會喜歡！(AI 害羞了，沒說出話來)";
+        const response = await model.generateContent(prompt);
+        const result = await response.response;
+        return result.text() || null;
     } catch (error) {
         console.error("Gemini API Error:", error);
-        throw new Error("Failed to generate blessing");
+        return null;
     }
 };

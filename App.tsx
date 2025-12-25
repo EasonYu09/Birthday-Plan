@@ -5,18 +5,20 @@ import CalculatingScreen from './components/CalculatingScreen';
 import ResultScreen from './components/ResultScreen';
 import { AppScreen, OptionCode, Scores } from './types';
 import { RESULTS } from './constants';
+import { generateBirthdayBlessing } from './services/geminiService';
 
 const App: React.FC = () => {
     const [currentScreen, setCurrentScreen] = useState<AppScreen>(AppScreen.WELCOME);
     const [finalResultCode, setFinalResultCode] = useState<OptionCode | null>(null);
+    const [aiBlessing, setAiBlessing] = useState<string | null>(null);
 
     const handleStart = () => {
         setCurrentScreen(AppScreen.QUIZ);
     };
 
-    const handleQuizComplete = (scores: Scores) => {
+    const handleQuizComplete = async (scores: Scores) => {
         setCurrentScreen(AppScreen.CALCULATING);
-        
+
         // Find the maximum score
         let maxScore = -1;
         (Object.keys(scores) as OptionCode[]).forEach((code) => {
@@ -38,10 +40,15 @@ const App: React.FC = () => {
 
         setFinalResultCode(finalWinner);
 
-        // Simulate calculation time
-        setTimeout(() => {
-            setCurrentScreen(AppScreen.RESULT);
-        }, 2000);
+        // Generate AI Blessing in parallel with the delay
+        const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
+        // Safe to call even if API key is missing (returns fallback)
+        const blessingPromise = generateBirthdayBlessing(RESULTS[finalWinner]);
+
+        const [_, blessing] = await Promise.all([minDelay, blessingPromise]);
+
+        setAiBlessing(blessing);
+        setCurrentScreen(AppScreen.RESULT);
     };
 
     const handleReset = () => {
@@ -54,20 +61,21 @@ const App: React.FC = () => {
             {currentScreen === AppScreen.WELCOME && (
                 <WelcomeScreen onStart={handleStart} />
             )}
-            
+
             {currentScreen === AppScreen.QUIZ && (
                 <QuizScreen onComplete={handleQuizComplete} />
             )}
-            
+
             {currentScreen === AppScreen.CALCULATING && (
                 <CalculatingScreen />
             )}
-            
+
             {currentScreen === AppScreen.RESULT && finalResultCode && (
-                <ResultScreen 
-                    resultCode={finalResultCode} 
-                    resultData={RESULTS[finalResultCode]} 
-                    onReset={handleReset} 
+                <ResultScreen
+                    resultCode={finalResultCode}
+                    resultData={RESULTS[finalResultCode]}
+                    aiBlessing={aiBlessing}
+                    onReset={handleReset}
                 />
             )}
         </div>

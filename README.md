@@ -1,20 +1,65 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Birthday Plan Quiz
 
-# Run and deploy your AI Studio app
+A React application for the 2026 Birthday Date Quiz.
 
-This contains everything you need to run your app locally.
+## Getting Started
 
-View your app in AI Studio: https://ai.studio/apps/drive/1OXCVWoPSjngdxe02jc_mA3Cd5KPkXYGl
+### Prerequisites
 
-## Run Locally
+- Node.js (v20 or higher recommended)
+- npm or yarn
 
-**Prerequisites:**  Node.js
+### Installation
 
+1.  Clone the repository:
+    ```bash
+    git clone <repository-url>
+    cd Birthday-Plan
+    ```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+### Development
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000`.
+
+### Build
+
+Build the project for production:
+
+```bash
+npm run build
+```
+
+The build artifacts will be stored in the `dist/` directory.
+
+### Preview
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+## Deployment
+
+This project is configured to deploy to GitHub Pages automatically via GitHub Actions.
+
+1.  Push your changes to the `main` branch.
+2.  The GitHub Action "Deploy to GitHub Pages" will trigger automatically.
+3.  Once completed, the site will be deployed to your GitHub Pages URL.
+
+**Note:** Ensure GitHub Pages is enabled in your repository settings (Settings > Pages > Build and deployment > Source: GitHub Actions).
+
+## Configuration
+
+- **Environment Variables**: Create a `.env` file in the root directory if you need to define environment variables (e.g., `VITE_API_KEY`).

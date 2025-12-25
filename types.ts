@@ -22,6 +22,7 @@ export interface ResultData {
     title: string;
     fullTitle: string;
     desc: string;
+    whisper: string; // New field for specific boyfriend whisper
     icon: string;
     timeline: TimelineItem[];
 }
